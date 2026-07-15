@@ -13,6 +13,8 @@ import { updateExplosions, drawExplosions } from './entities/explosions';
 import { spawnPowerUp, updatePowerUps, drawPowerUps } from './entities/powerups';
 import { enemiesForWave, seedWave, isWaveCleared } from './waveLogic';
 import { maybeSpawnWeaponPickup, checkPickupContact } from './weaponPickup';
+import { drawHeldWeapon } from './drawHeldWeapon';
+import { playShot, playReload, playPickup, setMuted, isMuted } from './sound';
 import {
   initWeaponProgression,
   effectiveStats,
@@ -156,6 +158,7 @@ export function useGameEngine(canvasRef) {
     if (s.player.ammo === stats.capacity) return;
     if (performance.now() < s.player.reloadEnd) return;
     s.player.reloadEnd = performance.now() + stats.reloadTime;
+    playReload();
   }, []);
 
   const fire = () => {
@@ -164,10 +167,16 @@ export function useGameEngine(canvasRef) {
     const { weapon: w, stats } = currentEffectiveStats(s);
     const now = performance.now();
     if (now < p.reloadEnd) return;
-    if (p.ammo <= 0) { p.reloadEnd = now + stats.reloadTime; return; }
+    if (p.ammo <= 0) {
+      const wasReloading = p.reloadEnd !== 0;
+      p.reloadEnd = now + stats.reloadTime;
+      if (!wasReloading) playReload();
+      return;
+    }
     if (now - p.lastFire < stats.fireRate) return;
     p.lastFire = now;
     p.ammo--;
+    playShot();
     const base = Math.atan2(s.mouse.y - p.y, s.mouse.x - p.x);
     const dmgMul = now < p.damageBoostEnd ? 1.6 : 1;
     for (let i = 0; i < stats.pellets; i++) {
@@ -267,7 +276,11 @@ export function useGameEngine(canvasRef) {
     maybeSpawnWeaponPickup(s);
 
     const { stats: curStats } = currentEffectiveStats(s);
-    if (p.ammo === 0 && now >= p.reloadEnd) p.reloadEnd = now + curStats.reloadTime;
+    if (p.ammo === 0 && now >= p.reloadEnd) {
+      const wasReloading = p.reloadEnd !== 0;
+      p.reloadEnd = now + curStats.reloadTime;
+      if (!wasReloading) playReload();
+    }
     if (p.reloadEnd && now >= p.reloadEnd) {
       if (p.ammo === 0) p.ammo = curStats.capacity;
       p.reloadEnd = 0;
@@ -345,10 +358,7 @@ export function useGameEngine(canvasRef) {
     ctx.ellipse(0, p.radius + 4, p.radius * 0.9, 4, 0, 0, Math.PI * 2);
     ctx.fill();
     ctx.rotate(p.angle);
-    ctx.fillStyle = '#94a3b8';
-    ctx.fillRect(p.radius - 2, -3, 16, 6);
-    ctx.fillStyle = '#e5e7eb';
-    ctx.fillRect(p.radius + 12, -2, 3, 4);
+    drawHeldWeapon(ctx, p, WEAPONS[p.weaponIndex]);
     ctx.rotate(-p.angle);
     const inv = now < p.invulnUntil;
     ctx.fillStyle = inv ? '#ef4444' : COLORS.player;
@@ -448,6 +458,7 @@ export function useGameEngine(canvasRef) {
       if (['Digit1', 'Digit2', 'Digit3', 'Digit4'].includes(e.code)) {
         switchWeapon(parseInt(e.code.slice(-1), 10) - 1);
       }
+      if (e.code === 'KeyM') setMuted(!isMuted());
       if (e.code === 'Space') { e.preventDefault(); }
     };
     const onKeyUp = (e) => { stateRef.current.keys[e.code] = false; };

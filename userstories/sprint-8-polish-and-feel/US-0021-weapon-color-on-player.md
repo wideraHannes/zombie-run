@@ -1,7 +1,7 @@
 ---
 id: US-0021
 title: Player-held weapon renders in the equipped weapon's color
-status: todo
+status: done
 created: 2026-07-15
 ---
 

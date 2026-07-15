@@ -31,13 +31,15 @@ describe('US-0010 start with single weapon', () => {
 
 describe('US-0008 weapon pickup spawns at 1/3 mag', () => {
   it('spawns exactly one pickup when ammo crosses to floor(capacity/3)', () => {
-    const s = makeState({ ammo: 5 }); // pistol cap 12, threshold 4
+    const pistolCap = WEAPONS.find((w) => w.id === 'pistol').capacity;
+    const threshold = Math.floor(pistolCap / 3);
+    const s = makeState({ ammo: threshold + 1 });
     // Above threshold — no spawn
     expect(maybeSpawnWeaponPickup(s)).toBeNull();
     expect(s.weaponPickups.length).toBe(0);
 
-    // Cross threshold: ammo drops to 4
-    s.player.ammo = 4;
+    // Cross threshold
+    s.player.ammo = threshold;
     const pu = maybeSpawnWeaponPickup(s);
     expect(pu).not.toBeNull();
     expect(s.weaponPickups.length).toBe(1);
@@ -45,20 +47,24 @@ describe('US-0008 weapon pickup spawns at 1/3 mag', () => {
   });
 
   it('does not spawn a second pickup while one is uncollected', () => {
-    const s = makeState({ ammo: 4 });
+    const pistolCap = WEAPONS.find((w) => w.id === 'pistol').capacity;
+    const threshold = Math.floor(pistolCap / 3);
+    const s = makeState({ ammo: threshold });
     maybeSpawnWeaponPickup(s);
     expect(s.weaponPickups.length).toBe(1);
 
     // continue firing below threshold — no new spawn
-    s.player.ammo = 3;
+    s.player.ammo = threshold - 1;
     maybeSpawnWeaponPickup(s);
-    s.player.ammo = 2;
+    s.player.ammo = threshold - 2;
     maybeSpawnWeaponPickup(s);
     expect(s.weaponPickups.length).toBe(1);
   });
 
   it('allows a fresh spawn after the previous pickup is collected and threshold re-crosses', () => {
-    const s = makeState({ ammo: 4 });
+    const pistolCap = WEAPONS.find((w) => w.id === 'pistol').capacity;
+    const threshold = Math.floor(pistolCap / 3);
+    const s = makeState({ ammo: threshold });
     maybeSpawnWeaponPickup(s);
     // player collects it (removes from field + adds to inventory)
     const pickedId = s.weaponPickups[0].weaponId;
@@ -71,7 +77,7 @@ describe('US-0008 weapon pickup spawns at 1/3 mag', () => {
     expect(s.weaponPickups.length).toBe(0);
 
     // fire back down to threshold
-    s.player.ammo = 4;
+    s.player.ammo = threshold;
     maybeSpawnWeaponPickup(s);
     expect(s.weaponPickups.length).toBe(1);
   });

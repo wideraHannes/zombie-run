@@ -25,9 +25,9 @@ Tests live under `src/game/__tests__/` (vitest, run with `npm test`).
 ## Sprint 8 — Polish & Feel
 | ID      | Title                                                 | Status |
 |---------|-------------------------------------------------------|--------|
-| US-0019 | Triple magazine capacity for every weapon             | todo   |
+| US-0019 | Triple magazine capacity for every weapon             | done   |
 | US-0020 | Add tasteful classic sound effects                    | todo   |
-| US-0021 | Player-held weapon renders in equipped weapon's color | todo   |
+| US-0021 | Player-held weapon renders in equipped weapon's color | done   |
 
 ## Done — `done/`
 | ID      | Title                                                | Sprint                  |

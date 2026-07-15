@@ -1,7 +1,7 @@
 ---
 id: US-0019
 title: Triple magazine capacity for every weapon
-status: todo
+status: done
 created: 2026-07-15
 ---
 

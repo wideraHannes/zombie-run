@@ -48,7 +48,7 @@ export const WEAPONS = [
   {
     id: 'pistol',
     name: 'Pistol',
-    capacity: 12,
+    capacity: 36,
     reloadTime: 1200,
     fireRate: 260,
     damage: 14,
@@ -66,7 +66,7 @@ export const WEAPONS = [
   {
     id: 'shotgun',
     name: 'Shotgun',
-    capacity: 6,
+    capacity: 18,
     reloadTime: 1800,
     fireRate: 650,
     damage: 9,
@@ -85,7 +85,7 @@ export const WEAPONS = [
   {
     id: 'smg',
     name: 'SMG',
-    capacity: 30,
+    capacity: 90,
     reloadTime: 1600,
     fireRate: 90,
     damage: 8,
@@ -104,7 +104,7 @@ export const WEAPONS = [
   {
     id: 'rocket',
     name: 'Rocket Launcher',
-    capacity: 3,
+    capacity: 9,
     reloadTime: 2400,
     fireRate: 900,
     damage: 45,
