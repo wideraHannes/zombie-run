@@ -1,0 +1,77 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  font-family: 'Rubik', sans-serif;
+  color: #e5e7eb;
+  background:
+    radial-gradient(1200px 600px at 20% 10%, rgba(0, 229, 255, 0.08), transparent 60%),
+    radial-gradient(900px 500px at 80% 90%, rgba(255, 43, 214, 0.08), transparent 60%),
+    linear-gradient(180deg, #030712 0%, #0b1220 100%);
+}
+
+.arcade {
+  font-family: 'Press Start 2P', cursive;
+  letter-spacing: 0.03em;
+}
+
+canvas {
+  image-rendering: pixelated;
+  touch-action: none;
+}
+
+.hud-card {
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.btn-neon {
+  position: relative;
+  padding: 0.6rem 1.1rem;
+  border-radius: 0.6rem;
+  color: #0b1220;
+  background: linear-gradient(135deg, #39ff14, #00e5ff);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  box-shadow: 0 6px 24px rgba(57, 255, 20, 0.35);
+  transition: transform 0.1s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+.btn-neon:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.08);
+  box-shadow: 0 8px 32px rgba(57, 255, 20, 0.55);
+}
+.btn-neon:active {
+  transform: translateY(0);
+}
+.btn-ghost {
+  padding: 0.55rem 1rem;
+  border-radius: 0.6rem;
+  color: #e5e7eb;
+  background: rgba(30, 41, 59, 0.7);
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.btn-ghost:hover {
+  background: rgba(51, 65, 85, 0.9);
+  border-color: rgba(148, 163, 184, 0.5);
+}
+
+.bar {
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(51, 65, 85, 0.8);
+  overflow: hidden;
+}
+.bar > div {
+  height: 100%;
+  transition: width 0.15s linear;
+}
