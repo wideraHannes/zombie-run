@@ -31,7 +31,7 @@ describe('US-0004 wave state machine', () => {
     expect(s.waveStatus).toBe('active');
 
     seedWave(s, 2);
-    expect(s.enemiesToSpawnInWave).toBe(WAVES.baseEnemies * 2);
+    expect(s.enemiesToSpawnInWave).toBe(enemiesForWave(2));
   });
 
   it('wave is cleared only when all spawn queues AND alive zombies are 0', () => {
@@ -98,5 +98,17 @@ describe('US-0007 boss on wave 10', () => {
     expect(isWaveCleared(s)).toBe(false);
     s.zombies.length = 0;
     expect(isWaveCleared(s)).toBe(true);
+  });
+});
+
+describe('SLICE-1 enemy cap', () => {
+  it('enemiesForWave(n) never exceeds 80 for waves 1–20', () => {
+    for (let n = 1; n <= 20; n++) {
+      expect(enemiesForWave(n)).toBeLessThanOrEqual(80);
+    }
+  });
+
+  it('enemiesForWave(1) returns 4', () => {
+    expect(enemiesForWave(1)).toBe(4);
   });
 });

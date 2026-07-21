@@ -1,8 +1,9 @@
-import { COLORS, WORLD, ZOMBIE } from '../constants';
+import { COLORS, POOLS, WORLD, ZOMBIE } from '../constants';
 import { dist, rand } from '../math';
 import { spawnParticles } from './particles';
 
 export function spawnZombie(state, variant = 'normal') {
+  if (state.zombies.length >= POOLS.enemies) return;
   const edge = Math.floor(Math.random() * 4);
   let radiusMul = 1;
   let hpMul = 1;
@@ -54,6 +55,7 @@ export function updateZombiesMovementAndContact(state, dt, now, onGameOver) {
 }
 
 export function drawZombies(ctx, state) {
+  const useGlow = state.zombies.length <= 30;
   state.zombies.forEach((z) => {
     const wob = Math.sin(z.wobble) * 2;
     ctx.save();
@@ -69,11 +71,11 @@ export function drawZombies(ctx, state) {
       : z.variant === 'strong' ? 'rgba(249,115,22,0.6)'
       : 'rgba(132,204,22,0.5)';
     ctx.fillStyle = fill;
-    ctx.shadowBlur = z.variant === 'normal' ? 10 : 18; ctx.shadowColor = glow;
+    if (useGlow) { ctx.shadowBlur = z.variant === 'normal' ? 10 : 18; ctx.shadowColor = glow; }
     ctx.beginPath();
     ctx.arc(0, 0, z.radius, 0, Math.PI * 2);
     ctx.fill();
-    ctx.shadowBlur = 0;
+    if (useGlow) ctx.shadowBlur = 0;
     ctx.fillStyle = COLORS.zombieDark;
     ctx.beginPath(); ctx.arc(-5, -3, 3, 0, Math.PI * 2); ctx.fill();
     ctx.beginPath(); ctx.arc(5, -3, 3, 0, Math.PI * 2); ctx.fill();

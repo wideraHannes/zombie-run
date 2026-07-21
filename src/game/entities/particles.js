@@ -1,6 +1,11 @@
+import { POOLS } from '../constants';
+
 export function spawnParticles(state, x, y, color, count = 8, speed = 180) {
+  const overflow = state.particles.length + count - POOLS.particles;
+  if (overflow > 0) state.particles.splice(0, overflow);
+  const actualCount = Math.min(count, POOLS.particles);
   const now = performance.now();
-  for (let i = 0; i < count; i++) {
+  for (let i = 0; i < actualCount; i++) {
     const a = Math.random() * Math.PI * 2;
     const v = speed * (0.4 + Math.random() * 0.8);
     state.particles.push({

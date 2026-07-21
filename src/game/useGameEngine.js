@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { COLORS, PLAYER, WEAPONS, WORLD, WAVES } from './constants';
+import { COLORS, PLAYER, POOLS, WEAPONS, WORLD, WAVES } from './constants';
 import { clamp } from './math';
 import { updateBullets, drawBullets } from './entities/bullets';
 import {
@@ -180,6 +180,7 @@ export function useGameEngine(canvasRef) {
     const base = Math.atan2(s.mouse.y - p.y, s.mouse.x - p.x);
     const dmgMul = now < p.damageBoostEnd ? 1.6 : 1;
     for (let i = 0; i < stats.pellets; i++) {
+      if (s.bullets.length >= POOLS.bullets) continue;
       const a = base + (Math.random() - 0.5) * stats.spread * 2;
       s.bullets.push({
         x: p.x + Math.cos(a) * (p.radius + 4),

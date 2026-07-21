@@ -32,7 +32,8 @@ export const ZOMBIE = {
 
 export const WAVES = {
   baseEnemies: 4,
-  growth: 2,
+  growth: 1.4,
+  maxEnemiesPerWave: 80,
   betweenMs: 10_000,
   strongEvery: 3,
   bossWave: 10,

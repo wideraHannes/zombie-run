@@ -2,7 +2,7 @@ import { WAVES } from './constants';
 
 export function enemiesForWave(n) {
   if (n <= 0) return 0;
-  return WAVES.baseEnemies * Math.pow(WAVES.growth, n - 1);
+  return Math.min(WAVES.maxEnemiesPerWave, WAVES.baseEnemies * Math.pow(WAVES.growth, n - 1));
 }
 
 export function seedWave(state, waveNumber) {
